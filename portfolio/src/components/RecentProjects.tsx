@@ -66,10 +66,13 @@ const RecentProjects = () => {
                 </div>
 
                 <div className="flex justify-center items-center">
-                  <p className="flex lg:text-xl md:text-xs text-sm text-purple">
+                  <button
+                    className="flex items-center lg:text-xl md:text-xs text-sm text-white-600 px-4 py-2 rounded bg-purple-600 hover:bg-purple-400 transition"
+                    onClick={() => window.open(item.link, "_blank")}
+                    type="button"
+                  >
                     Check Live Site
-                  </p>
-                  {/* <FaLocationArrow className="ms-3" color="#CBACF9" /> */}
+                  </button>
                 </div>
               </div>
             </PinContainer>

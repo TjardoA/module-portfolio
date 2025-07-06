@@ -39,7 +39,7 @@ const Hero = () => {
             Hi! I&apos;m Tjardo, a Developer based in the Netherlands.
           </p>
 
-          <a href="#about">
+          <a href="#projects">
             <MagicButton title="Show my work" />
           </a>
         </div>
