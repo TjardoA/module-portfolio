@@ -164,10 +164,6 @@ export const BentoGridItem = ({
           )}
           {id === 6 && (
             <div className="mt-5 relative">
-              {/* button border magic from tailwind css buttons  */}
-              {/* add rounded-md h-8 md:h-8, remove rounded-full */}
-              {/* remove focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 */}
-              {/* add handleCopy() for the copy the text */}
               <div
                 className={`absolute -bottom-5 right-0 ${
                   copied ? "block" : "block"
@@ -175,9 +171,12 @@ export const BentoGridItem = ({
               ></div>
 
               <MagicButton
-                title={copied ? "Email is Copied!" : "Copy my email address"}
+                title="Send me an email"
                 position="left"
-                handleClick={handleCopy}
+                handleClick={() =>
+                  (window.location.href =
+                    "mailto:tjardo.antonie@example.com?subject=Let%27s%20start%20a%20project&body=Hi%20[Your%20Name],%0D%0A%0D%0AI%20would%20like%20to%20collaborate%20on%20a%20project.%20Can%20you%20tell%20me%20more?")
+                }
                 otherClasses="!bg-[#161A31]"
               />
             </div>
