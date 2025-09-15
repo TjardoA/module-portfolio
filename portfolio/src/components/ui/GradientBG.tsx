@@ -39,6 +39,8 @@ export const BackgroundGradientAnimation = ({
   const [curY, setCurY] = useState(0);
   const [tgX, setTgX] = useState(0);
   const [tgY, setTgY] = useState(0);
+
+  // ✅ zet CSS variabelen en update wanneer props veranderen
   useEffect(() => {
     document.body.style.setProperty(
       "--gradient-background-start",
@@ -56,23 +58,53 @@ export const BackgroundGradientAnimation = ({
     document.body.style.setProperty("--pointer-color", pointerColor);
     document.body.style.setProperty("--size", size);
     document.body.style.setProperty("--blending-value", blendingValue);
-  }, []);
+  }, [
+    gradientBackgroundStart,
+    gradientBackgroundEnd,
+    firstColor,
+    secondColor,
+    thirdColor,
+    fourthColor,
+    fifthColor,
+    pointerColor,
+    size,
+    blendingValue,
+  ]);
 
+  // ✅ animatie via requestAnimationFrame
   useEffect(() => {
-    function move() {
-      if (!interactiveRef.current) {
-        return;
-      }
-      setCurX(curX + (tgX - curX) / 20);
-      setCurY(curY + (tgY - curY) / 20);
-      interactiveRef.current.style.transform = `translate(${Math.round(
-        curX
-      )}px, ${Math.round(curY)}px)`;
-    }
+    let frameId: number;
 
-    move();
-  }, [tgX, tgY]);
+    const animate = () => {
+      setCurX((prevX) => {
+        const newX = prevX + (tgX - prevX) / 20;
+        if (interactiveRef.current) {
+          interactiveRef.current.style.transform = `translate(${Math.round(
+            newX
+          )}px, ${Math.round(curY)}px)`;
+        }
+        return newX;
+      });
 
+      setCurY((prevY) => {
+        const newY = prevY + (tgY - prevY) / 20;
+        if (interactiveRef.current) {
+          interactiveRef.current.style.transform = `translate(${Math.round(
+            curX
+          )}px, ${Math.round(newY)}px)`;
+        }
+        return newY;
+      });
+
+      frameId = requestAnimationFrame(animate);
+    };
+
+    frameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(frameId);
+  }, [tgX, tgY, curX, curY]);
+
+  // mousemove handler
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactiveRef.current) {
       const rect = interactiveRef.current.getBoundingClientRect();
@@ -81,6 +113,7 @@ export const BackgroundGradientAnimation = ({
     }
   };
 
+  // Safari fix
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {
     setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
@@ -126,7 +159,7 @@ export const BackgroundGradientAnimation = ({
             `animate-first`,
             `opacity-100`
           )}
-        ></div>
+        />
         <div
           className={cn(
             `absolute [background:radial-gradient(circle_at_center,_rgba(var(--second-color),_0.8)_0,_rgba(var(--second-color),_0)_50%)_no-repeat]`,
@@ -135,7 +168,7 @@ export const BackgroundGradientAnimation = ({
             `animate-second`,
             `opacity-100`
           )}
-        ></div>
+        />
         <div
           className={cn(
             `absolute [background:radial-gradient(circle_at_center,_rgba(var(--third-color),_0.8)_0,_rgba(var(--third-color),_0)_50%)_no-repeat]`,
@@ -144,7 +177,7 @@ export const BackgroundGradientAnimation = ({
             `animate-third`,
             `opacity-100`
           )}
-        ></div>
+        />
         <div
           className={cn(
             `absolute [background:radial-gradient(circle_at_center,_rgba(var(--fourth-color),_0.8)_0,_rgba(var(--fourth-color),_0)_50%)_no-repeat]`,
@@ -153,7 +186,7 @@ export const BackgroundGradientAnimation = ({
             `animate-fourth`,
             `opacity-70`
           )}
-        ></div>
+        />
         <div
           className={cn(
             `absolute [background:radial-gradient(circle_at_center,_rgba(var(--fifth-color),_0.8)_0,_rgba(var(--fifth-color),_0)_50%)_no-repeat]`,
@@ -162,7 +195,7 @@ export const BackgroundGradientAnimation = ({
             `animate-fifth`,
             `opacity-100`
           )}
-        ></div>
+        />
 
         {interactive && (
           <div
@@ -173,7 +206,7 @@ export const BackgroundGradientAnimation = ({
               `[mix-blend-mode:var(--blending-value)] w-full h-full -top-1/2 -left-1/2`,
               `opacity-70`
             )}
-          ></div>
+          />
         )}
       </div>
     </div>
